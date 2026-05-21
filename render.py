@@ -63,36 +63,73 @@ CSS = """
                   margin-bottom: 18px; }
   table { border-collapse: collapse; width: 100%; }
   table.bordered td, table.bordered th { border: 1.5px solid #1f1f1f; }
+  table.compact { width: auto !important; }
   td, th { padding: 9px 12px; text-align: center; font-size: 14px;
            font-weight: 600; }
   th.label-col, td.label-col { text-align: left; }
-  .green   { background: #C8E6C0; }
+  /* Tuned to Mary's actual color saturation */
+  .green   { background: #B6E0B0; }
   .green-l { background: #DDEDEA; }
-  .yellow  { background: #FBF3DB; }
-  .yellow-s{ background: #F8E1A2; }
-  .red     { background: #E8B7B7; }
+  .yellow  { background: #F4D69E; }
+  .yellow-s{ background: #E8B85A; }
+  .red     { background: #E08484; }
   .red-l   { background: #FBE4E4; }
-  .red-s   { background: #D88080; color: white; }
+  .red-s   { background: #C25151; color: white; }
   .gray    { background: #ECECE9; color: #555; }
   .gray-h  { background: #F2F2F0; }
   .blue-h  { background: #DCE9F2; }
   .num     { font-variant-numeric: tabular-nums; }
   .small   { font-size: 12px; }
-  .tier-row td { font-size: 11px; padding: 6px 8px; color: #5b5b5b; }
+  .tier-row td { font-size: 11px; padding: 6px 10px; color: #5b5b5b; }
   .tier-label { font-weight: 700; font-size: 12px; }
-  .annotation { font-weight: 700; font-size: 13px; }
-  .logo-cell { width: 110px; text-align: center; padding: 8px; }
-  .logo-cell img { max-width: 80px; max-height: 40px; }
+  .annotation { font-weight: 700; font-size: 13px; padding: 6px 12px; }
   .totals-row { background: #F0F0EE; font-weight: 700; }
+  /* Brand logo cells — clean text-mark with brand color */
+  .logo-cell { width: 110px; text-align: center; padding: 12px;
+               background: #FAFAFA; vertical-align: middle; }
+  .logo-mark { display: inline-flex; align-items: center;
+               justify-content: center;
+               width: 56px; height: 56px; border-radius: 50%;
+               background: white; font-weight: 900; font-size: 30px;
+               line-height: 1; box-shadow: 0 0 0 2px #e6e6e6 inset; }
+  .logo-google  { color: #4285F4; }
+  .logo-google::before { content: "G"; }
+  .logo-meta    { color: #1877F2; }
+  .logo-meta::before { content: "f"; font-family: Georgia, serif; }
+  .logo-bing    { color: #008373; }
+  .logo-bing::before { content: "b"; font-family: Georgia, serif; }
+  .logo-search  { color: #4285F4; font-size: 28px; }
+  .logo-search::before { content: "⌕"; }
+  .logo-direct  { color: #5F5F5F; font-size: 26px; }
+  .logo-direct::before { content: "✉"; }
+  .logo-name    { display: block; margin-top: 8px;
+                  font-weight: 700; font-size: 13px; color: #333; }
 </style>
 """
 
+# Logo class lookup for channel-sprint blocks
+LOGO_CLASSES = {
+    "google ads":     "logo-google",
+    "meta ads":       "logo-meta",
+    "bing":           "logo-bing",
+    "google organic": "logo-search",
+    "direct/other traffic": "logo-direct",
+}
+
 # ----- Color helpers ------------------------------------------------------
 
-def pct_color(pct: float | None, *, lo: float = 85, hi: float = 100) -> str:
-    """Map a % to color class: <lo red, lo..hi yellow, >=hi green."""
+def pct_color(pct: float | None, *, lo: float = 85, hi: float = 100,
+              deep_lo: float = 50) -> str:
+    """Map a % to color class:
+       <deep_lo: deep red (red-s); deep_lo..lo: red; lo..hi: yellow; >=hi: green.
+
+    Mary uses a punchier red shade for very low % cells. We surface that with
+    .red-s for anything below 50%.
+    """
     if pct is None:
         return "gray"
+    if pct < deep_lo:
+        return "red-s"
     if pct < lo:
         return "red"
     if pct < hi:
@@ -279,24 +316,27 @@ def _tier_block_html(card_code: str, tier_data: dict, status: str = "green") -> 
     annotation_cls = tier_data.get("annotation_class", "yellow-s")
 
     return f"""
-    <table class="bordered" style="margin-bottom:14px;">
-      <tr>
-        <td class="label-col gray-h"><strong>{dot} {card_code} Tiers</strong></td>
-        <th>Actuals</th>
-        <th>Pacing</th>
-        <td colspan="{max(1, ncols_for_tiers - 2)}" class="label-col gray-h small">
-          {goals_note}
-        </td>
-      </tr>
-      <tr>
-        <td class="label-col"><strong>Totals</strong></td>
-        <td class="yellow num"><strong>{fmt_int(tier_data['actuals'])}</strong></td>
-        <td class="yellow num"><strong>{fmt_int(tier_data['pacing'])}</strong></td>
-        <td colspan="{max(1, ncols_for_tiers - 2)}"
-            class="{annotation_cls} annotation">{annotation}</td>
-      </tr>
-      <tr>{tier_label_cells}</tr>
-    </table>
+    <div style="margin-left: 80px; margin-bottom: 14px;">
+      <table class="bordered compact">
+        <tr>
+          <td class="label-col gray-h" style="min-width:140px;">
+            <strong>{dot} {card_code} Tiers</strong>
+          </td>
+          <th style="min-width:80px;">Actuals</th>
+          <th style="min-width:80px;">Pacing</th>
+          <td colspan="{max(1, ncols_for_tiers - 2)}" class="label-col gray-h small"
+              style="min-width:240px;">{goals_note}</td>
+        </tr>
+        <tr>
+          <td class="label-col"><strong>Totals</strong></td>
+          <td class="yellow num"><strong>{fmt_int(tier_data['actuals'])}</strong></td>
+          <td class="yellow num"><strong>{fmt_int(tier_data['pacing'])}</strong></td>
+          <td colspan="{max(1, ncols_for_tiers - 2)}"
+              class="{annotation_cls} annotation">{annotation}</td>
+        </tr>
+        <tr>{tier_label_cells}</tr>
+      </table>
+    </div>
     """
 
 
@@ -487,15 +527,18 @@ def render_card_sprint(payload: dict, out_path: Path) -> Path:
     return render_html_to_png(html, out_path, viewport_width=1500)
 
 
-def _channel_block_html(channel_name: str, logo_emoji: str,
-                        rows: list[dict], totals: dict) -> str:
-    """One channel block for the Channel Sprint sections."""
+def _channel_block_html(channel_name: str, logo_class: str,
+                        rows: list[dict], totals: dict, *,
+                        monthly_goal_label: str = "Monthly Goal") -> str:
+    """One channel block for the Channel Sprint sections.
+
+    logo_class: 'logo-google', 'logo-meta', 'logo-bing', 'logo-search', 'logo-direct'.
+    """
     row_html = []
     for r in rows:
         pct_cls = pct_color(r["pct"]) if r.get("pct") is not None else "gray"
         row_html.append(f"""
         <tr>
-          <td></td>
           <td class="label-col">{r['card_full_name']}</td>
           <td class="num">{r['cpa']}</td>
           <td class="blue-h num">{fmt_int(r['monthly_goal'])}</td>
@@ -508,12 +551,12 @@ def _channel_block_html(channel_name: str, logo_emoji: str,
     <table class="bordered channel-block">
       <tr class="gray-h">
         <td rowspan="{len(rows) + 2}" class="logo-cell">
-          <div style="font-size:28px;">{logo_emoji}</div>
-          <div style="font-weight:700; font-size:14px;">{channel_name}</div>
+          <span class="logo-mark {logo_class}"></span>
+          <span class="logo-name">{channel_name}</span>
         </td>
         <th>Card</th>
         <th>CPA</th>
-        <th class="blue-h">Monthly Goal</th>
+        <th class="blue-h">{monthly_goal_label}</th>
         <th>Actuals MTD</th>
         <th>Pacing</th>
         <th>% Pacing to Goal</th>
@@ -536,8 +579,8 @@ def render_channel_sprint_1(payload: dict, out_path: Path) -> Path:
     g = payload["google_ads"]
     m = payload["meta_ads"]
     html = (
-        _channel_block_html("Google Ads", "🔵", g["rows"], g["totals"])
-        + _channel_block_html("Meta Ads", "🔷", m["rows"], m["totals"])
+        _channel_block_html("Google Ads", "logo-google", g["rows"], g["totals"])
+        + _channel_block_html("Meta Ads", "logo-meta", m["rows"], m["totals"])
     )
     return render_html_to_png(html, out_path, viewport_width=1300)
 
@@ -545,7 +588,7 @@ def render_channel_sprint_1(payload: dict, out_path: Path) -> Path:
 def render_channel_sprint_2(payload: dict, out_path: Path) -> Path:
     """Image 9: Bing Ads."""
     b = payload["bing_ads"]
-    html = _channel_block_html("Bing", "🟢", b["rows"], b["totals"])
+    html = _channel_block_html("Bing Ads", "logo-bing", b["rows"], b["totals"])
     return render_html_to_png(html, out_path, viewport_width=1300)
 
 
@@ -554,8 +597,8 @@ def render_channel_sprint_3(payload: dict, out_path: Path) -> Path:
     g = payload["google_organic"]
     d = payload["direct_other"]
     html = (
-        _channel_block_html("Google Organic", "🔎", g["rows"], g["totals"])
-        + _channel_block_html("Direct/Other Traffic", "📩", d["rows"], d["totals"])
+        _channel_block_html("Google Organic", "logo-search", g["rows"], g["totals"])
+        + _channel_block_html("Direct/Other Traffic", "logo-direct", d["rows"], d["totals"])
     )
     return render_html_to_png(html, out_path, viewport_width=1300)
 
