@@ -1,0 +1,690 @@
+{
+  "pacing_1": {
+    "month": "May",
+    "ABP": {
+      "status": "green",
+      "has_min": true,
+      "last": {
+        "eom": 225,
+        "pct_min": 225,
+        "pct_stretch": 141
+      },
+      "current": {
+        "eom": 210,
+        "pct_min": 210,
+        "pct_stretch": 131,
+        "current_per_day": 6,
+        "needed_per_day_min": 0,
+        "needed_per_day_stretch": 4
+      }
+    },
+    "ABG": {
+      "status": "red",
+      "has_min": true,
+      "last": {
+        "eom": 65,
+        "pct_min": 65,
+        "pct_stretch": 41
+      },
+      "current": {
+        "eom": 65,
+        "pct_min": 65,
+        "pct_stretch": 41,
+        "current_per_day": 2,
+        "needed_per_day_min": 5,
+        "needed_per_day_stretch": 10
+      }
+    }
+  },
+  "pacing_2": {
+    "month": "May",
+    "AP": {
+      "status": "green",
+      "has_min": true,
+      "last": {
+        "eom": 405,
+        "pct_min": 116,
+        "pct_stretch": 81
+      },
+      "current": {
+        "eom": 428,
+        "pct_min": 122,
+        "pct_stretch": 86,
+        "current_per_day": 12,
+        "needed_per_day_min": 10,
+        "needed_per_day_stretch": 22
+      }
+    },
+    "AP_tier": {
+      "status": "yellow",
+      "tiers": [
+        {
+          "label": "Bottom Tier",
+          "range": "0-149",
+          "class": "red-l"
+        },
+        {
+          "label": "Low Mid Tier.",
+          "range": "150-349",
+          "class": "yellow"
+        },
+        {
+          "label": "Top Mid Tier.",
+          "range": "350+",
+          "class": "yellow-s"
+        },
+        {
+          "label": "Tiipy Top Tier.",
+          "range": "500+",
+          "class": "green-l"
+        }
+      ],
+      "actuals": 219,
+      "pacing": 428,
+      "annotation": "Low Mid Achieved, Pacing to Top Mid",
+      "annotation_class": "yellow-s",
+      "goals_note": "*Goals edited: Min 350+ Stretch 500+"
+    }
+  },
+  "pacing_3": {
+    "month": "May",
+    "AG": {
+      "status": "green",
+      "has_min": true,
+      "last": {
+        "eom": 673,
+        "pct_min": 168,
+        "pct_stretch": 122
+      },
+      "current": {
+        "eom": 713,
+        "pct_min": 178,
+        "pct_stretch": 130,
+        "current_per_day": 21,
+        "needed_per_day_min": 2,
+        "needed_per_day_stretch": 14
+      }
+    },
+    "AG_tier": {
+      "status": "green",
+      "tiers": [
+        {
+          "label": "Bottom Tier",
+          "range": "0-149",
+          "class": "red-l"
+        },
+        {
+          "label": "Middle Tier.",
+          "range": "150-349",
+          "class": "yellow"
+        },
+        {
+          "label": "Top Tier.",
+          "range": "350+",
+          "class": "green-l"
+        }
+      ],
+      "actuals": 370,
+      "pacing": 713,
+      "annotation": "Top Tier Achieved!",
+      "annotation_class": "green",
+      "goals_note": ""
+    },
+    "BCP": {
+      "status": "red",
+      "has_min": false,
+      "last": {
+        "eom": 112,
+        "pct_min": null,
+        "pct_stretch": 56
+      },
+      "current": {
+        "eom": 116,
+        "pct_min": null,
+        "pct_stretch": 58,
+        "current_per_day": 3,
+        "needed_per_day_min": null,
+        "needed_per_day_stretch": 11
+      }
+    },
+    "BCP_tier": {
+      "status": "red",
+      "tiers": [
+        {
+          "label": "Bottom Tier.",
+          "range": "0-199",
+          "class": "red-l"
+        },
+        {
+          "label": "Top Tier.",
+          "range": "200+",
+          "class": "green-l"
+        }
+      ],
+      "actuals": 55,
+      "pacing": 116,
+      "annotation": "Pacing in Bottom Tier",
+      "annotation_class": "red-s",
+      "goals_note": ""
+    }
+  },
+  "pacing_4": {
+    "month": "May",
+    "BCE": {
+      "status": "yellow",
+      "has_min": true,
+      "last": {
+        "eom": 212,
+        "pct_min": 85,
+        "pct_stretch": 61
+      },
+      "current": {
+        "eom": 218,
+        "pct_min": 87,
+        "pct_stretch": 62,
+        "current_per_day": 6,
+        "needed_per_day_min": 11,
+        "needed_per_day_stretch": 19
+      }
+    }
+  },
+  "roas_mid": {
+    "channels": [
+      {
+        "name": "Google",
+        "status": "green",
+        "roas": {
+          "last": 106,
+          "current": 110,
+          "dir": "UP"
+        },
+        "profit": {
+          "last": 6816,
+          "current": 13057,
+          "dir": "UP"
+        },
+        "spend": {
+          "last": 106975,
+          "current": 132836
+        }
+      },
+      {
+        "name": "Meta",
+        "status": "green",
+        "roas": {
+          "last": 112,
+          "current": 120,
+          "dir": "UP"
+        },
+        "profit": {
+          "last": 42580,
+          "current": 82037,
+          "dir": "UP"
+        },
+        "spend": {
+          "last": 354395,
+          "current": 418088
+        }
+      },
+      {
+        "name": "Bing",
+        "status": "green",
+        "roas": {
+          "last": 226,
+          "current": 187,
+          "dir": "DN"
+        },
+        "profit": {
+          "last": 4536,
+          "current": 4562,
+          "dir": "UP"
+        },
+        "spend": {
+          "last": 3589,
+          "current": 5263
+        }
+      }
+    ]
+  },
+  "ns_google": {
+    "cards": [
+      {
+        "code": "ABP",
+        "last": 71,
+        "current": 61,
+        "dir": "DN"
+      },
+      {
+        "code": "ABG",
+        "last": 27,
+        "current": 30,
+        "dir": "UP"
+      },
+      {
+        "code": "AP",
+        "last": 57,
+        "current": 53,
+        "dir": "DN"
+      },
+      {
+        "code": "AG",
+        "last": 94,
+        "current": 113,
+        "dir": "UP"
+      },
+      {
+        "code": "BCP",
+        "last": 52,
+        "current": 52,
+        "dir": "same"
+      },
+      {
+        "code": "BCE",
+        "last": 0,
+        "current": 42,
+        "dir": "UP"
+      }
+    ]
+  },
+  "card_sprint": {
+    "rows": [
+      {
+        "card_full_name": "Amex Business Platinum",
+        "month": "May",
+        "cpa": "$1,200",
+        "min_threshold": 100,
+        "tier_target": null,
+        "stretch_goal": 160,
+        "actuals_mtd": 105,
+        "pacing": 210,
+        "pct_min": 210,
+        "pct_stretch": 131
+      },
+      {
+        "card_full_name": "Amex Business Gold",
+        "month": "May",
+        "cpa": "$1,000",
+        "min_threshold": 100,
+        "tier_target": null,
+        "stretch_goal": 160,
+        "actuals_mtd": 30,
+        "pacing": 65,
+        "pct_min": 65,
+        "pct_stretch": 41
+      },
+      {
+        "card_full_name": "Amex Platinum",
+        "month": "May",
+        "cpa": "$600-$1250",
+        "min_threshold": 350,
+        "tier_target": 350,
+        "stretch_goal": 500,
+        "actuals_mtd": 219,
+        "pacing": 428,
+        "pct_min": 122,
+        "pct_stretch": 86
+      },
+      {
+        "card_full_name": "Amex Gold",
+        "month": "May",
+        "cpa": "$600-$1100",
+        "min_threshold": 400,
+        "tier_target": 350,
+        "stretch_goal": 550,
+        "actuals_mtd": 370,
+        "pacing": 713,
+        "pct_min": 178,
+        "pct_stretch": 130
+      },
+      {
+        "card_full_name": "Blue Cash Preferred",
+        "month": "May",
+        "cpa": "$350-$450",
+        "min_threshold": null,
+        "tier_target": null,
+        "stretch_goal": 200,
+        "actuals_mtd": 55,
+        "pacing": 116,
+        "pct_min": null,
+        "pct_stretch": 58
+      },
+      {
+        "card_full_name": "Blue Cash Everyday",
+        "month": "May",
+        "cpa": "$300",
+        "min_threshold": 250,
+        "tier_target": null,
+        "stretch_goal": 350,
+        "actuals_mtd": 109,
+        "pacing": 218,
+        "pct_min": 87,
+        "pct_stretch": 62
+      }
+    ],
+    "totals": {
+      "min_threshold": 950,
+      "stretch_goal": 1970,
+      "actuals_mtd": 888,
+      "pacing": 1750,
+      "pct_stretch": 89
+    }
+  },
+  "channel_sprint_1": {
+    "google_ads": {
+      "rows": [
+        {
+          "card_full_name": "Amex Business Platinum",
+          "cpa": "$750-$1,500",
+          "monthly_goal": 30,
+          "actuals_mtd": 18,
+          "pacing": 18,
+          "pct": 61
+        },
+        {
+          "card_full_name": "Amex Business Gold",
+          "cpa": "$1,000",
+          "monthly_goal": 30,
+          "actuals_mtd": 4,
+          "pacing": 9,
+          "pct": 30
+        },
+        {
+          "card_full_name": "Amex Platinum",
+          "cpa": "$600-$1000",
+          "monthly_goal": 112,
+          "actuals_mtd": 31,
+          "pacing": 60,
+          "pct": 53
+        },
+        {
+          "card_full_name": "Amex Gold",
+          "cpa": "$600-$1000",
+          "monthly_goal": 41,
+          "actuals_mtd": 25,
+          "pacing": 47,
+          "pct": 113
+        },
+        {
+          "card_full_name": "Blue Cash Preferred",
+          "cpa": "$250-$400",
+          "monthly_goal": 48,
+          "actuals_mtd": 11,
+          "pacing": 25,
+          "pct": 52
+        },
+        {
+          "card_full_name": "Blue Cash Everyday",
+          "cpa": "$300",
+          "monthly_goal": 24,
+          "actuals_mtd": 3,
+          "pacing": 10,
+          "pct": 42
+        }
+      ],
+      "totals": {
+        "monthly_goal": 84,
+        "actuals_mtd": 92,
+        "pacing": 168,
+        "pct": 56
+      }
+    },
+    "meta_ads": {
+      "rows": [
+        {
+          "card_full_name": "Amex Business Platinum",
+          "cpa": "$750-$1,500",
+          "monthly_goal": 73,
+          "actuals_mtd": 70,
+          "pacing": 139,
+          "pct": 191
+        },
+        {
+          "card_full_name": "Amex Business Gold",
+          "cpa": "$1,000",
+          "monthly_goal": 42,
+          "actuals_mtd": 14,
+          "pacing": 38,
+          "pct": 90
+        },
+        {
+          "card_full_name": "Amex Platinum",
+          "cpa": "$600-$1000",
+          "monthly_goal": 276,
+          "actuals_mtd": 144,
+          "pacing": 280,
+          "pct": 102
+        },
+        {
+          "card_full_name": "Amex Gold",
+          "cpa": "$600-$1100",
+          "monthly_goal": 197,
+          "actuals_mtd": 303,
+          "pacing": 587,
+          "pct": 298
+        },
+        {
+          "card_full_name": "Blue Cash Preferred",
+          "cpa": "$250-$400",
+          "monthly_goal": 111,
+          "actuals_mtd": 38,
+          "pacing": 79,
+          "pct": 71
+        },
+        {
+          "card_full_name": "Blue Cash Everyday",
+          "cpa": "$300",
+          "monthly_goal": 94,
+          "actuals_mtd": 103,
+          "pacing": 206,
+          "pct": 218
+        }
+      ],
+      "totals": {
+        "monthly_goal": 792,
+        "actuals_mtd": 672,
+        "pacing": 1329,
+        "pct": 168
+      }
+    }
+  },
+  "channel_sprint_2": {
+    "bing_ads": {
+      "rows": [
+        {
+          "card_full_name": "Amex Business Platinum",
+          "cpa": "$750-$1,500",
+          "monthly_goal": 4,
+          "actuals_mtd": 3,
+          "pacing": 5,
+          "pct": 117
+        },
+        {
+          "card_full_name": "Amex Business Gold",
+          "cpa": "$1,000",
+          "monthly_goal": 6,
+          "actuals_mtd": 4,
+          "pacing": 7,
+          "pct": 115
+        },
+        {
+          "card_full_name": "Amex Platinum",
+          "cpa": "$600-$1000",
+          "monthly_goal": 16,
+          "actuals_mtd": 4,
+          "pacing": 7,
+          "pct": 43
+        },
+        {
+          "card_full_name": "Amex Gold",
+          "cpa": "$600-$1000",
+          "monthly_goal": 4,
+          "actuals_mtd": 0,
+          "pacing": 0,
+          "pct": 0
+        },
+        {
+          "card_full_name": "Blue Cash Preferred",
+          "cpa": "$250-$400",
+          "monthly_goal": 5,
+          "actuals_mtd": 0,
+          "pacing": 0,
+          "pct": 0
+        },
+        {
+          "card_full_name": "Blue Cash Everyday",
+          "cpa": "$300",
+          "monthly_goal": 3,
+          "actuals_mtd": 0,
+          "pacing": 0,
+          "pct": 0
+        }
+      ],
+      "totals": {
+        "monthly_goal": 38,
+        "actuals_mtd": 11,
+        "pacing": 19,
+        "pct": 49
+      }
+    }
+  },
+  "channel_sprint_3": {
+    "google_organic": {
+      "rows": [
+        {
+          "card_full_name": "Amex Business Platinum",
+          "cpa": "$750-$1,500",
+          "monthly_goal": 53,
+          "actuals_mtd": 28,
+          "pacing": 53,
+          "pct": 53
+        },
+        {
+          "card_full_name": "Amex Business Gold",
+          "cpa": "$1,000",
+          "monthly_goal": 19,
+          "actuals_mtd": 7,
+          "pacing": 13,
+          "pct": 68
+        },
+        {
+          "card_full_name": "Amex Platinum",
+          "cpa": "$600-$1000",
+          "monthly_goal": 89,
+          "actuals_mtd": 15,
+          "pacing": 32,
+          "pct": 36
+        },
+        {
+          "card_full_name": "Amex Gold",
+          "cpa": "$600-$1100",
+          "monthly_goal": 40,
+          "actuals_mtd": 23,
+          "pacing": 44,
+          "pct": 109
+        },
+        {
+          "card_full_name": "Blue Cash Preferred",
+          "cpa": "$250-$400",
+          "monthly_goal": 9,
+          "actuals_mtd": 2,
+          "pacing": 4,
+          "pct": 43
+        },
+        {
+          "card_full_name": "Blue Cash Everyday",
+          "cpa": "$300",
+          "monthly_goal": 3,
+          "actuals_mtd": 0,
+          "pacing": 0,
+          "pct": 0
+        }
+      ],
+      "totals": {
+        "monthly_goal": 213,
+        "actuals_mtd": 75,
+        "pacing": 146,
+        "pct": 64
+      }
+    },
+    "direct_other": {
+      "rows": [
+        {
+          "card_full_name": "Amex Business Platinum",
+          "cpa": "$750-$1,500",
+          "monthly_goal": 23,
+          "actuals_mtd": 9,
+          "pacing": 23,
+          "pct": 101
+        },
+        {
+          "card_full_name": "Amex Business Gold",
+          "cpa": "$1,000",
+          "monthly_goal": 12,
+          "actuals_mtd": 4,
+          "pacing": 9,
+          "pct": 76
+        },
+        {
+          "card_full_name": "Amex Platinum",
+          "cpa": "$600-$1000",
+          "monthly_goal": 61,
+          "actuals_mtd": 22,
+          "pacing": 46,
+          "pct": 76
+        },
+        {
+          "card_full_name": "Amex Gold",
+          "cpa": "$600-$1100",
+          "monthly_goal": 21,
+          "actuals_mtd": 19,
+          "pacing": 36,
+          "pct": 171
+        },
+        {
+          "card_full_name": "Blue Cash Preferred",
+          "cpa": "$250-$400",
+          "monthly_goal": 7,
+          "actuals_mtd": 5,
+          "pacing": 9,
+          "pct": 131
+        },
+        {
+          "card_full_name": "Blue Cash Everyday",
+          "cpa": "$300",
+          "monthly_goal": 4,
+          "actuals_mtd": 0,
+          "pacing": 0,
+          "pct": 0
+        }
+      ],
+      "totals": {
+        "monthly_goal": 128,
+        "actuals_mtd": 59,
+        "pacing": 123,
+        "pct": 96
+      }
+    }
+  },
+  "roas_bottom": {
+    "channels": [
+      {
+        "name": "Google",
+        "roas": 110,
+        "profit": 13057,
+        "spend": 132836
+      },
+      {
+        "name": "Meta",
+        "roas": 120,
+        "profit": 82037,
+        "spend": 418088
+      },
+      {
+        "name": "Bing",
+        "roas": 187,
+        "profit": 4562,
+        "spend": 5263
+      }
+    ]
+  }
+}
