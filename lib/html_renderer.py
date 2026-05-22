@@ -34,16 +34,16 @@ body {
   font-size: 13px;
   color: #000000;
   background: #FFFFFF;
-  padding: 16px;
+  padding: 6px;
 }
 .section-title {
   display: inline-block;
   border: 1.5px solid #000000;
-  padding: 6px 12px;
-  font-size: 13px;
+  padding: 4px 8px;
+  font-size: 10px;
   font-weight: 700;
   color: #000000;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 .section-subtitle {
   font-size: 12px;
@@ -63,11 +63,11 @@ table:last-child {
 }
 th, td {
   border: 1px solid #000000;
-  padding: 3px 6px;
+  padding: 2px 4px;
   text-align: center;
   vertical-align: middle;
-  font-size: 9px;
-  line-height: 1.2;
+  font-size: 7px;
+  line-height: 1.15;
   font-weight: 700;
 }
 th {
@@ -97,8 +97,8 @@ td.gray-bg   { background: #EFEFEF; color: #595959; font-weight: 400; }
 .card-header-row td.yellow-bg { font-weight: 700; }
 /* ROAS-block — compact (Mary's cells render small in Notion display) */
 table.roas-block td.num,
-table.roas-block th { text-align: right; padding: 3px 8px; font-size: 9px; }
-table.roas-block td.label { text-align: left; padding: 3px 6px; font-weight: 700; font-size: 9px; }
+table.roas-block th { text-align: right; padding: 2px 5px; font-size: 7px; }
+table.roas-block td.label { text-align: left; padding: 2px 4px; font-weight: 700; font-size: 7px; }
 table.roas-block .card-header-row td.label {
   text-align: right;
   padding-left: 14px;
@@ -178,27 +178,27 @@ table.channel-sprint .channel-glyph img[alt="Meta"] {
 .glyph-organic { background: #FFFFFF; color: #34A853; }
 .glyph-direct  { background: #FFFFFF; color: #F4B400; }
 
-/* Bottom-of-page ROAS summary blocks — narrower (Mary's are 484px) */
+/* Bottom-of-page ROAS summary blocks — compact (target 30% smaller) */
 table.bottom-roas {
   border: 1.5px solid #000;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
 table.bottom-roas th {
   background: #FFFFFF;
-  font-size: 12px;
+  font-size: 8px;
   font-weight: 700;
-  padding: 6px 8px;
+  padding: 3px 5px;
   border: 1px solid #000;
   text-align: center;
-  line-height: 1.25;
+  line-height: 1.2;
 }
 table.bottom-roas th.blue-head {
   background: #CFE2F3;
   color: #1F4E79;
 }
 table.bottom-roas td {
-  font-size: 13px;
-  padding: 6px 8px;
+  font-size: 9px;
+  padding: 3px 5px;
   border: 1px solid #000;
   text-align: center;
   font-weight: 700;
@@ -248,8 +248,8 @@ table.tier-subtable {
 }
 table.tier-subtable td,
 table.tier-subtable th {
-  font-size: 9px;
-  padding: 4px 8px;
+  font-size: 7px;
+  padding: 3px 5px;
   border: 1px solid #000;
 }
 table.tier-subtable th {
