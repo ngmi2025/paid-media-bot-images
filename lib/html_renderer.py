@@ -63,11 +63,11 @@ table:last-child {
 }
 th, td {
   border: 1px solid #000000;
-  padding: 7px 14px;
+  padding: 5px 9px;
   text-align: center;
   vertical-align: middle;
-  font-size: 13px;
-  line-height: 1.3;
+  font-size: 11px;
+  line-height: 1.25;
   font-weight: 700;
 }
 th {
@@ -95,10 +95,10 @@ td.gray-bg   { background: #EFEFEF; color: #595959; font-weight: 400; }
 .card-header-row td.green-bg,
 .card-header-row td.red-bg,
 .card-header-row td.yellow-bg { font-weight: 700; }
-/* ROAS-block uses right-aligned values and headers (matches Mary's sheet) */
+/* ROAS-block — compact (Mary's cells render small in Notion display) */
 table.roas-block td.num,
-table.roas-block th { text-align: right; padding: 6px 24px; }
-table.roas-block td.label { text-align: left; padding: 6px 18px; font-weight: 700; }
+table.roas-block th { text-align: right; padding: 4px 14px; font-size: 11px; }
+table.roas-block td.label { text-align: left; padding: 4px 12px; font-weight: 700; font-size: 11px; }
 table.roas-block .card-header-row td.label {
   text-align: right;
   padding-left: 14px;
