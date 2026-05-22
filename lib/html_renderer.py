@@ -39,11 +39,11 @@ body {
 .section-title {
   display: inline-block;
   border: 1.5px solid #000000;
-  padding: 8px 16px;
-  font-size: 18px;
+  padding: 6px 12px;
+  font-size: 13px;
   font-weight: 700;
   color: #000000;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 .section-subtitle {
   font-size: 12px;
@@ -63,11 +63,11 @@ table:last-child {
 }
 th, td {
   border: 1px solid #000000;
-  padding: 5px 9px;
+  padding: 3px 6px;
   text-align: center;
   vertical-align: middle;
-  font-size: 11px;
-  line-height: 1.25;
+  font-size: 9px;
+  line-height: 1.2;
   font-weight: 700;
 }
 th {
@@ -97,8 +97,8 @@ td.gray-bg   { background: #EFEFEF; color: #595959; font-weight: 400; }
 .card-header-row td.yellow-bg { font-weight: 700; }
 /* ROAS-block — compact (Mary's cells render small in Notion display) */
 table.roas-block td.num,
-table.roas-block th { text-align: right; padding: 4px 14px; font-size: 11px; }
-table.roas-block td.label { text-align: left; padding: 4px 12px; font-weight: 700; font-size: 11px; }
+table.roas-block th { text-align: right; padding: 3px 8px; font-size: 9px; }
+table.roas-block td.label { text-align: left; padding: 3px 6px; font-weight: 700; font-size: 9px; }
 table.roas-block .card-header-row td.label {
   text-align: right;
   padding-left: 14px;
@@ -248,8 +248,8 @@ table.tier-subtable {
 }
 table.tier-subtable td,
 table.tier-subtable th {
-  font-size: 12px;
-  padding: 8px 12px;
+  font-size: 9px;
+  padding: 4px 8px;
   border: 1px solid #000;
 }
 table.tier-subtable th {
