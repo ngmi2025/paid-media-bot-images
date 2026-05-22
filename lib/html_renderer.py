@@ -34,16 +34,22 @@ body {
   font-size: 13px;
   color: #000000;
   background: #FFFFFF;
-  padding: 6px;
+  padding: 16px;
+}
+body.compact { padding: 6px; }
+body.compact .section-title {
+  padding: 4px 8px;
+  font-size: 10px;
+  margin-bottom: 8px;
 }
 .section-title {
   display: inline-block;
   border: 1.5px solid #000000;
-  padding: 4px 8px;
-  font-size: 10px;
+  padding: 6px 12px;
+  font-size: 13px;
   font-weight: 700;
   color: #000000;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 .section-subtitle {
   font-size: 12px;
@@ -63,11 +69,11 @@ table:last-child {
 }
 th, td {
   border: 1px solid #000000;
-  padding: 2px 4px;
+  padding: 3px 6px;
   text-align: center;
   vertical-align: middle;
-  font-size: 7px;
-  line-height: 1.15;
+  font-size: 9px;
+  line-height: 1.2;
   font-weight: 700;
 }
 th {
@@ -248,8 +254,8 @@ table.tier-subtable {
 }
 table.tier-subtable td,
 table.tier-subtable th {
-  font-size: 7px;
-  padding: 3px 5px;
+  font-size: 9px;
+  padding: 4px 8px;
   border: 1px solid #000;
 }
 table.tier-subtable th {
@@ -356,8 +362,9 @@ CARD_NAMES_FULL = {
 }
 
 
-def _wrap(content: str) -> str:
-    return f"<!DOCTYPE html><html><head><meta charset='utf-8'><style>{NOTION_CSS}</style></head><body>{content}</body></html>"
+def _wrap(content: str, body_class: str = "") -> str:
+    body_attr = f" class='{body_class}'" if body_class else ""
+    return f"<!DOCTYPE html><html><head><meta charset='utf-8'><style>{NOTION_CSS}</style></head><body{body_attr}>{content}</body></html>"
 
 
 def _render_tier_subtable(tiers: dict[str, Any]) -> str:
@@ -539,7 +546,7 @@ def render_roas_section(channels: list[dict[str, Any]], out_path: Path | str) ->
     # Remove the trailing spacer so the crop is tight
     if blocks and blocks[-1].endswith("height:14px;'></div>"):
         blocks.pop()
-    return render_html_to_png(_wrap("\n".join(blocks)), out_path, viewport_width=900)
+    return render_html_to_png(_wrap("\n".join(blocks), body_class="compact"), out_path, viewport_width=900)
 
 
 def _gradient_color_for_pct(pct: float | None) -> str:
@@ -610,7 +617,7 @@ def render_card_sprint_summary(rows: list[dict[str, Any]], out_path: Path | str,
             + "</tr>"
         )
     table_html = f"<table class='card-sprint'>{thead}{''.join(body_html)}</table>"
-    return render_html_to_png(_wrap(table_html), out_path, viewport_width=1400)
+    return render_html_to_png(_wrap(table_html, body_class="compact"), out_path, viewport_width=1400)
 
 
 # Real brand logos as base64-encoded SVG data URIs (no network dependency at render time).
@@ -693,7 +700,7 @@ def render_channel_sprint_single(channel: dict[str, Any], out_path: Path | str) 
         )
 
     table_html = f"<table class='card-sprint channel-sprint'>{header_row}{''.join(body_html)}</table>"
-    return render_html_to_png(_wrap(table_html), out_path, viewport_width=1200)
+    return render_html_to_png(_wrap(table_html, body_class="compact"), out_path, viewport_width=1200)
 
 
 def render_bottom_roas_summary(channels: list[dict[str, Any]], out_path: Path | str) -> Path:
@@ -722,7 +729,7 @@ def render_bottom_roas_summary(channels: list[dict[str, Any]], out_path: Path | 
     # Trim trailing spacer for tight crop
     if blocks:
         blocks[-1] = blocks[-1].replace("<div style='height:18px;'></div>", "")
-    return render_html_to_png(_wrap("\n".join(blocks)), out_path, viewport_width=480)
+    return render_html_to_png(_wrap("\n".join(blocks), body_class="compact"), out_path, viewport_width=480)
 
 
 def render_mini_pacing_table(
@@ -757,7 +764,7 @@ def render_mini_pacing_table(
         "<div class='mini-label'>Pacing</div>"
         f"<table class='mini-pacing'>{header}{''.join(body_html)}</table>"
     )
-    return render_html_to_png(_wrap(table_html), out_path, viewport_width=900)
+    return render_html_to_png(_wrap(table_html, body_class="compact"), out_path, viewport_width=900)
 
 
 def render_channel_sprint(channels: list[dict[str, Any]], out_dir: Path | str) -> list[Path]:
