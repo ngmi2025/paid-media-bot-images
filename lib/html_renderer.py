@@ -63,7 +63,7 @@ table:last-child {
 }
 th, td {
   border: 1px solid #000000;
-  padding: 10px 14px;
+  padding: 7px 14px;
   text-align: center;
   vertical-align: middle;
   font-size: 13px;
@@ -97,8 +97,8 @@ td.gray-bg   { background: #EFEFEF; color: #595959; font-weight: 400; }
 .card-header-row td.yellow-bg { font-weight: 700; }
 /* ROAS-block uses right-aligned values and headers (matches Mary's sheet) */
 table.roas-block td.num,
-table.roas-block th { text-align: right; padding-right: 14px; }
-table.roas-block td.label { text-align: left; padding-left: 14px; }
+table.roas-block th { text-align: right; padding: 6px 24px; }
+table.roas-block td.label { text-align: left; padding: 6px 18px; font-weight: 700; }
 table.roas-block .card-header-row td.label {
   text-align: right;
   padding-left: 14px;
@@ -115,8 +115,8 @@ table.card-sprint th {
   font-weight: 700;
   text-align: center;
   font-size: 12px;
-  padding: 8px 10px;
-  line-height: 1.25;
+  padding: 5px 10px;
+  line-height: 1.2;
 }
 table.card-sprint th.blue-head {
   background: #CFE2F3;
@@ -125,7 +125,7 @@ table.card-sprint td {
   background: #FFFFFF;
   font-weight: 400;
   font-size: 12px;
-  padding: 6px 10px;
+  padding: 3px 10px;
 }
 table.card-sprint td.label { text-align: left; padding-left: 10px; font-weight: 400; }
 table.card-sprint td.num { text-align: right; padding-right: 10px; }
@@ -156,10 +156,21 @@ table.channel-sprint .channel-glyph {
   width: 56px;
   height: 56px;
   border-radius: 12px;
-  border: 1px solid #DDD;
   text-align: center;
   vertical-align: middle;
   padding-top: 14px;
+}
+table.channel-sprint .channel-glyph img.channel-logo {
+  max-width: 56px;
+  max-height: 56px;
+  width: auto;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+/* Wider logo box for the Meta wordmark which has long aspect ratio */
+table.channel-sprint .channel-glyph img[alt="Meta"] {
+  max-width: 80px;
 }
 .glyph-google  { background: #FFFFFF; color: #4285F4; font-family: "Arial", sans-serif; }
 .glyph-meta    { background: #FFFFFF; color: #0866FF; font-family: "Arial", sans-serif; }
@@ -167,16 +178,16 @@ table.channel-sprint .channel-glyph {
 .glyph-organic { background: #FFFFFF; color: #34A853; }
 .glyph-direct  { background: #FFFFFF; color: #F4B400; }
 
-/* Bottom-of-page ROAS summary blocks */
+/* Bottom-of-page ROAS summary blocks — narrower (Mary's are 484px) */
 table.bottom-roas {
   border: 1.5px solid #000;
   margin-bottom: 10px;
 }
 table.bottom-roas th {
   background: #FFFFFF;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
-  padding: 10px 14px;
+  padding: 6px 8px;
   border: 1px solid #000;
   text-align: center;
   line-height: 1.25;
@@ -187,13 +198,13 @@ table.bottom-roas th.blue-head {
 }
 table.bottom-roas td {
   font-size: 13px;
-  padding: 10px 14px;
+  padding: 6px 8px;
   border: 1px solid #000;
   text-align: center;
   font-weight: 700;
 }
 
-/* Mini Pacing table (inside NEXT STEPS bullets) */
+/* Mini Pacing table (inside NEXT STEPS bullets) — sized close to Mary's 868×364 */
 .mini-label {
   font-weight: 700;
   font-size: 14px;
@@ -204,20 +215,20 @@ table.mini-pacing {
 }
 table.mini-pacing th {
   background: #FFFFFF;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
-  padding: 6px 12px;
+  padding: 6px 32px;
   text-align: right;
   border: 1px solid #000;
 }
 table.mini-pacing th.mini-channel {
   background: #CCCCCC;
   text-align: right;
-  padding-right: 12px;
+  padding-right: 32px;
 }
 table.mini-pacing td {
-  font-size: 12px;
-  padding: 4px 12px;
+  font-size: 13px;
+  padding: 3px 32px;
   border: 1px solid #000;
   text-align: right;
 }
@@ -225,6 +236,7 @@ table.mini-pacing td.label {
   background: #FFFFFF;
   font-weight: 700;
   text-align: left;
+  padding-left: 32px;
 }
 
 /* Tier subtable — appended below the card's pacing table */
@@ -485,7 +497,7 @@ def render_pacing_tables(
         tiers = card.get("tiers")
         if tiers:
             blocks.append(_render_tier_subtable(tiers))
-    return render_html_to_png(_wrap("\n".join(blocks)), out_path, viewport_width=1100)
+    return render_html_to_png(_wrap("\n".join(blocks)), out_path, viewport_width=1400)
 
 
 def render_roas_section(channels: list[dict[str, Any]], out_path: Path | str) -> Path:
@@ -527,7 +539,7 @@ def render_roas_section(channels: list[dict[str, Any]], out_path: Path | str) ->
     # Remove the trailing spacer so the crop is tight
     if blocks and blocks[-1].endswith("height:14px;'></div>"):
         blocks.pop()
-    return render_html_to_png(_wrap("\n".join(blocks)), out_path, viewport_width=700)
+    return render_html_to_png(_wrap("\n".join(blocks)), out_path, viewport_width=900)
 
 
 def _gradient_color_for_pct(pct: float | None) -> str:
@@ -601,11 +613,26 @@ def render_card_sprint_summary(rows: list[dict[str, Any]], out_path: Path | str,
     return render_html_to_png(_wrap(table_html), out_path, viewport_width=1400)
 
 
-# Channel-icon visuals — small inline SVG/text glyphs matching Mary's logos.
+# Real brand logos as base64-encoded SVG data URIs (no network dependency at render time).
+# Google "G" is the official multi-color G; Meta is the gradient infinity wordmark;
+# Bing is the blue/teal "b" icon. Organic + Direct use emoji approximations.
+_GOOGLE_G_SVG_B64 = (
+    "PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+CjxwYXRoIGZpbGw9IiM0Mjg1RjQiIGQ9Ik00NS4xMiAyNC41YzAtMS41Ni0uMTQtMy4wNi0uNC00LjVIMjR2OC41MWgxMS44NGMtLjUxIDIuNzUtMi4wNiA1LjA4LTQuMzkgNi42NHY1LjUyaDcuMTFjNC4xNi0zLjgzIDYuNTYtOS40NyA2LjU2LTE2LjE3eiIvPgo8cGF0aCBmaWxsPSIjMzRBODUzIiBkPSJNMjQgNDZjNS45NCAwIDEwLjkyLTEuOTcgMTQuNTYtNS4zM2wtNy4xMS01LjUyYy0xLjk3IDEuMzItNC40OSAyLjEtNy40NSAyLjEtNS43MyAwLTEwLjU4LTMuODctMTIuMzEtOS4wN0g0LjM0djUuN0M3Ljk2IDQxLjA3IDE1LjQgNDYgMjQgNDZ6Ii8+CjxwYXRoIGZpbGw9IiNGQkJDMDUiIGQ9Ik0xMS42OSAyOC4xOEMxMS4yNSAyNi44NiAxMSAyNS40NSAxMSAyNHMuMjUtMi44Ni42OS00LjE4di01LjdINC4zNEMyLjg1IDE3LjA5IDIgMjAuNDUgMiAyNGMwIDMuNTUuODUgNi45MSAyLjM0IDkuODhsNy4zNS01Ljd6Ii8+CjxwYXRoIGZpbGw9IiNFQTQzMzUiIGQ9Ik0yNCAxMC43NWMzLjIzIDAgNi4xMyAxLjExIDguNDEgMy4yOWw2LjMxLTYuMzFDMzQuOTEgNC4xOCAyOS45MyAyIDI0IDIgMTUuNCAyIDcuOTYgNi45MyA0LjM0IDE0LjEybDcuMzUgNS43QzEzLjQyIDE0LjYyIDE4LjI3IDEwLjc1IDI0IDEwLjc1eiIvPgo8L3N2Zz4="
+)
+_META_SVG_B64 = (
+    "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbG5zOmNjPSJodHRwOi8vY3JlYXRpdmVjb21tb25zLm9yZy9ucyMiIHdpZHRoPSI5NDgiIGhlaWdodD0iMTkxIj4KPGRlc2M+TG9nbyBvZiBNZXRhIFBsYXRmb3JtcyAtLSBHcmFwaGljIGNyZWF0ZWQgYnkgRGV0bWFyIE93ZW48L2Rlc2M+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9IkdyYWRfTG9nbzEiIHgxPSI2MSIgeTE9IjExNyIgeDI9IjI1OSIgeTI9IjEyNyIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8c3RvcCBzdHlsZT0ic3RvcC1jb2xvcjojMDA2NGUxIiBvZmZzZXQ9IjAiLz4KPHN0b3Agc3R5bGU9InN0b3AtY29sb3I6IzAwNjRlMSIgb2Zmc2V0PSIwLjQiLz4KPHN0b3Agc3R5bGU9InN0b3AtY29sb3I6IzAwNzNlZSIgb2Zmc2V0PSIwLjgzIi8+CjxzdG9wIHN0eWxlPSJzdG9wLWNvbG9yOiMwMDgyZmIiIG9mZnNldD0iMSIvPgo8L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9IkdyYWRfTG9nbzIiIHgxPSI0NSIgeTE9IjEzOSIgeDI9IjQ1IiB5Mj0iNjYiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3R5bGU9InN0b3AtY29sb3I6IzAwODJmYiIgb2Zmc2V0PSIwIi8+CjxzdG9wIHN0eWxlPSJzdG9wLWNvbG9yOiMwMDY0ZTAiIG9mZnNldD0iMSIvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxwYXRoIGlkPSJMb2dvMCIgc3R5bGU9ImZpbGw6IzAwODFmYiIgZD0ibTMxLjA2LDEyNS45NmMwLDEwLjk4IDIuNDEsMTkuNDEgNS41NiwyNC41MSA0LjEzLDYuNjggMTAuMjksOS41MSAxNi41Nyw5LjUxIDguMSwwIDE1LjUxLTIuMDEgMjkuNzktMjEuNzYgMTEuNDQtMTUuODMgMjQuOTItMzguMDUgMzMuOTktNTEuOThsMTUuMzYtMjMuNmMxMC42Ny0xNi4zOSAyMy4wMi0zNC42MSAzNy4xOC00Ni45NiAxMS41Ni0xMC4wOCAyNC4wMy0xNS42OCAzNi41OC0xNS42OCAyMS4wNywwIDQxLjE0LDEyLjIxIDU2LjUsMzUuMTEgMTYuODEsMjUuMDggMjQuOTcsNTYuNjcgMjQuOTcsODkuMjcgMCwxOS4zOC0zLjgyLDMzLjYyLTEwLjMyLDQ0Ljg3LTYuMjgsMTAuODgtMTguNTIsMjEuNzUtMzkuMTEsMjEuNzVsMC0zMS4wMmMxNy42MywwIDIyLjAzLTE2LjIgMjIuMDMtMzQuNzQgMC0yNi40Mi02LjE2LTU1Ljc0LTE5LjczLTc2LjY5LTkuNjMtMTQuODYtMjIuMTEtMjMuOTQtMzUuODQtMjMuOTQtMTQuODUsMC0yNi44LDExLjItNDAuMjMsMzEuMTctNy4xNCwxMC42MS0xNC40NywyMy41NC0yMi43LDM4LjEzbC05LjA2LDE2LjA1Yy0xOC4yLDMyLjI3LTIyLjgxLDM5LjYyLTMxLjkxLDUxLjc1LTE1Ljk1LDIxLjI0LTI5LjU3LDI5LjI5LTQ3LjUsMjkuMjktMjEuMjcsMC0zNC43Mi05LjIxLTQzLjA1LTIzLjA5LTYuOC0xMS4zMS0xMC4xNC0yNi4xNS0xMC4xNC00My4wNnoiLz4KPHBhdGggaWQ9IkxvZ28xIiBzdHlsZT0iZmlsbDp1cmwoI0dyYWRfTG9nbzEpIiBkPSJtMjQuNDksMzcuM2MxNC4yNC0yMS45NSAzNC43OS0zNy4zIDU4LjM2LTM3LjMgMTMuNjUsMCAyNy4yMiw0LjA0IDQxLjM5LDE1LjYxIDE1LjUsMTIuNjUgMzIuMDIsMzMuNDggNTIuNjMsNjcuODFsNy4zOSwxMi4zMmMxNy44NCwyOS43MiAyNy45OSw0NS4wMSAzMy45Myw1Mi4yMiA3LjY0LDkuMjYgMTIuOTksMTIuMDIgMTkuOTQsMTIuMDIgMTcuNjMsMCAyMi4wMy0xNi4yIDIyLjAzLTM0Ljc0bDI3LjQtLjg2YzAsMTkuMzgtMy44MiwzMy42Mi0xMC4zMiw0NC44Ny02LjI4LDEwLjg4LTE4LjUyLDIxLjc1LTM5LjExLDIxLjc1LTEyLjgsMC0yNC4xNC0yLjc4LTM2LjY4LTE0LjYxLTkuNjQtOS4wOC0yMC45MS0yNS4yMS0yOS41OC0zOS43MWwtMjUuNzktNDMuMDhjLTEyLjk0LTIxLjYyLTI0LjgxLTM3Ljc0LTMxLjY4LTQ1LjA0LTcuMzktNy44NS0xNi44OS0xNy4zMy0zMi4wNS0xNy4zMy0xMi4yNywwLTIyLjY5LDguNjEtMzEuNDEsMjEuNzh6Ii8+CjxwYXRoIGlkPSJMb2dvMiIgc3R5bGU9ImZpbGw6dXJsKCNHcmFkX0xvZ28yKSIgZD0ibTgyLjM1LDMxLjIzYy0xMi4yNywwLTIyLjY5LDguNjEtMzEuNDEsMjEuNzgtMTIuMzMsMTguNjEtMTkuODgsNDYuMzMtMTkuODgsNzIuOTUgMCwxMC45OCAyLjQxLDE5LjQxIDUuNTYsMjQuNTFsLTI2LjQ4LDE3LjQ0Yy02LjgtMTEuMzEtMTAuMTQtMjYuMTUtMTAuMTQtNDMuMDYgMC0zMC43NSA4LjQ0LTYyLjggMjQuNDktODcuNTUgMTQuMjQtMjEuOTUgMzQuNzktMzcuMyA1OC4zNi0zNy4zeiIvPgo8L3N2Zz4K"
+)
+_BING_SVG_B64 = (
+    "PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA2NzggMTAyNCI+PHBhdGggZmlsbD0idXJsKCNhKSIgZD0iTTAgNzc4LjNjMTQuNiAxMjMuOCAyMjMuOCAxNDMgMjM2LjggNzkuOS0uMy0uNC0uNS02NzguMS0uNS02NzguMS0zLjYtNDYtMjYuMi03Mi02MS42LTk2LjUtMzMtMjIuNy03NC40LTUwLjQtOTYuOS02Ni40QzE0LjItMjggLjEgMzEuNCAwIDMzLjJjMCAwIC4zIDc0Ni40IDAgNzQ1LjF6Ii8+PHBhdGggZmlsbD0idXJsKCNiKSIgZD0iTTIzNi44IDgzMi44Yy05Ni4yIDcyLjUtMjE3IDQyLjctMjM0LjQtNDQtLjgtNC4yLTIuNC0xMC40LTIuNC0xMC40cy45IDguNSAyIDE2LjZjMS4yIDguNSAzLjcgMjAuOCA2LjMgMzEuMyAzMCAxMTcuOCAxMzIuMSAxODYgMjMwLjQgMTk2LjZDMzczLjMgMTAzNC44IDQ5Ny40IDkzMSA1OTkgODU1LjhjNi4zLTYuMiAxNS40LTE2LjIgMTguMS0yMC4xIDY2LjItOTUtMTMuNi0xOTctNzIuNS0xOTNhNTkxNTQgNTkxNTQgMCAwIDAtMzA3LjcgMTkwLjFaIi8+PHBhdGggZmlsbD0idXJsKCNjKSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzEyLjggMzgxYzcuNCA0NyAzNC42IDEwOC43IDU5LjYgMTcyLjYgMjAuMiA0MS4zIDYyIDUzLjQgMTAzIDY1LjUgNDIuNCAxMi42IDY1LjYgMjEgODUuNiAzMC45IDEzOC41IDY4LjcgMzguNSAyMDcuNyA1OS42IDE4MS40IDg5LTExMC43IDc5LjctMzI1LjQtOTAtNDE4LjEtNTcuNi0yOC43LTExNS40LTY2LjYtMTU2LjUtODMuNi00MS0xNy02OC43IDQuMy02MS4zIDUxLjN6IiBjbGlwLXJ1bGU9ImV2ZW5vZGQiLz48ZGVmcz48cmFkaWFsR3JhZGllbnQgaWQ9ImMiIGN4PSIwIiBjeT0iMCIgcj0iMSIgZ3JhZGllbnRUcmFuc2Zvcm09Im1hdHJpeCgtMzQ3IC0zOTkuMyAyODcuMyAtMjQ5LjggNjU1IDcyMikiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj48c3RvcCBzdG9wLWNvbG9yPSIjMDBDQUNDIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMDQ4RkNFIi8+PC9yYWRpYWxHcmFkaWVudD48cmFkaWFsR3JhZGllbnQgaWQ9ImIiIGN4PSIwIiBjeT0iMCIgcj0iMSIgZ3JhZGllbnRUcmFuc2Zvcm09Im1hdHJpeCg1MjYgLTIyNS40IDM3NS42IDg3Ni42IDg4LjggOTE1LjEpIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHN0b3Agc3RvcC1jb2xvcj0iIzAwQkJFQyIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzI3NTZBOSIvPjwvcmFkaWFsR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJhIiB4MT0iMTE4LjQiIHgyPSIxMTguNCIgeTE9IjAiIHkyPSI4ODQuNCIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPjxzdG9wIHN0b3AtY29sb3I9IiMwMEJCRUMiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMyNzU2QTkiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48L3N2Zz4="
+)
+def _logo_img(b64: str, alt: str) -> str:
+    return f"<img class='channel-logo' src='data:image/svg+xml;base64,{b64}' alt='{alt}'/>"
+
+# Channel-icon visuals — real brand SVGs for Google/Meta/Bing; emoji for the rest.
 CHANNEL_GLYPHS = {
-    "google_ads":     ("Google Ads",       "<span class='glyph glyph-google'>G</span>"),
-    "meta_ads":       ("Meta Ads",         "<span class='glyph glyph-meta'>∞</span>"),
-    "bing_ads":       ("Bing Ads",         "<span class='glyph glyph-bing'>b</span>"),
+    "google_ads":     ("Google Ads",       _logo_img(_GOOGLE_G_SVG_B64, "Google")),
+    "meta_ads":       ("Meta Ads",         _logo_img(_META_SVG_B64, "Meta")),
+    "bing_ads":       ("Bing Ads",         _logo_img(_BING_SVG_B64, "Bing")),
     "google_organic": ("Google Organic",   "<span class='glyph glyph-organic'>🔍</span>"),
     "direct_other":   ("Direct/Other Traffic", "<span class='glyph glyph-direct'>🚦</span>"),
 }
@@ -695,7 +722,7 @@ def render_bottom_roas_summary(channels: list[dict[str, Any]], out_path: Path | 
     # Trim trailing spacer for tight crop
     if blocks:
         blocks[-1] = blocks[-1].replace("<div style='height:18px;'></div>", "")
-    return render_html_to_png(_wrap("\n".join(blocks)), out_path, viewport_width=600)
+    return render_html_to_png(_wrap("\n".join(blocks)), out_path, viewport_width=480)
 
 
 def render_mini_pacing_table(
@@ -730,7 +757,7 @@ def render_mini_pacing_table(
         "<div class='mini-label'>Pacing</div>"
         f"<table class='mini-pacing'>{header}{''.join(body_html)}</table>"
     )
-    return render_html_to_png(_wrap(table_html), out_path, viewport_width=550)
+    return render_html_to_png(_wrap(table_html), out_path, viewport_width=900)
 
 
 def render_channel_sprint(channels: list[dict[str, Any]], out_dir: Path | str) -> list[Path]:
