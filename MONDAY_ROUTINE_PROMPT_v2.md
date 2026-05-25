@@ -4,7 +4,11 @@ You are the Paid Media Bot running its weekly Monday-morning orchestration. Toda
 
 **Critical context:** Fully autonomous run. Do every step. Gracefully degrade on errors rather than stopping.
 
-**Test mode:** DM Luke (`U09DBQ4E9T9`), not Mary. Notion page is a sub-page (not the live one).
+**Mode switch (env var):**
+- `MODE=prod` (default if unset) → DM **both** Mary (`U09FNB5TC12`) AND Luke (`U09DBQ4E9T9`). Notion page title is clean: `🧮 Tracking Report — TODAY`.
+- `MODE=test` → DM Luke only. Notion page title prefixed `[Bot Auto-Run TEST]`.
+
+Both modes write to the same Notion parent page (`30dd50a654258024b865d338f1febdee`) — Mary can move/rename the page after review.
 
 ---
 
@@ -115,11 +119,11 @@ Write `/tmp/bot/goals.json` (May 2026 — update monthly):
 
 ---
 
-## STEP 2 — Pull Hex data via 3 parallel threads
+## STEP 2 — Pull Hex data via 4 parallel threads
 
-Use `mcp__Hex__create_thread` THREE times in parallel.
+Use `mcp__Hex__create_thread` FOUR times in parallel.
 
-**Thread A — Card+Channel:**
+**Thread A — Card+Channel (current MTD):**
 Query `up-server-side-tracking.up_prod_curated.fct_sales_and_declines_sessions`, filter `event_type='Sale' AND DATE(click_date,'America/Chicago') BETWEEN first-of-month AND today()-1 AND sale_source='impact' AND cc_name NOT LIKE '%T B C%'`. Group by card (ABP/ABG/AP/AG/BCP/BCE) and channel (google=`'google ads'`, meta=`'facebook ads'`, bing=`'bing ads'`, google_organic=`'not paid' AND source LIKE 'google / organic%'`, direct_other=everything else). Return: `| card_code | card_name | google | meta | bing | google_organic | direct_other | mtd_total | sales_per_day | eom_pacing | days_elapsed | days_in_month |`. No commentary.
 
 **Thread B — Daily series:**
@@ -135,13 +139,18 @@ Spend tables (USE THESE EXACT PATHS to avoid 5-min schema hunting):
 
 Return six rows (Google/Meta/Bing × MTD/PriorMonth): `| channel | period | roas_pct | profit_loss_usd | spend_usd | revenue_usd | sales |`. Format $ + commas + %. No commentary.
 
+**Thread D — Card+Channel snapshot AS OF LAST MONDAY** (for the "Last" column on the mini-Pacing-Google image and on Pacing tables):
+Same query as Thread A but with the end-date pinned to **last Monday minus 1 day** (i.e. the report Mary would have generated 7 days ago). Compute that date as `today() - 8 days` in `America/Chicago`. Return: `| card_code | card_name | google | meta | bing | google_organic | direct_other | mtd_total | days_elapsed |` where `days_elapsed` = number of days from first-of-month through (today-8) inclusive.
+
 Poll each via `mcp__Hex__get_thread` every 30s until IDLE. Retry once on error.
 
 ---
 
 ## STEP 3 — Parse Hex responses + compute pacing
 
-Parse markdown tables. For each card, run `lm_prediction(daily_cumulative, days_in_month=31)`. Compute pct_min/pct_stretch using `goals.json`. Color: red <85, yellow 85-100, green ≥100. BCP has no min — null.
+Parse markdown tables. For each card, run `lm_prediction(daily_cumulative, days_in_month=days_in_current_month)`. Compute pct_min/pct_stretch using `goals.json`. Color: red <85, yellow 85-100, green ≥100. BCP has no min — null.
+
+**Use Thread D for "Last" values:** for each (card, channel) compute last-Monday's pacing-to-goal % from Thread D's `mtd_total` and `days_elapsed`, then `last_pacing = mtd * days_in_month / days_elapsed`. Mini-Pacing-Google `last`/`current` values must reflect actual last-week vs this-week snapshots. Same for the Pacing tables' "Last" column on EOM Pacing / Pacing to Min / Pacing to Stretch.
 
 ---
 
@@ -279,19 +288,28 @@ Construct toggle markdown — mirrors Mary's exact layout:
 
 ---
 
-## STEP 8 — Create Notion sub-page (TEST mode)
+## STEP 8 — Create Notion sub-page
 
-`mcp__Notion__notion-create-pages` with parent `{"type":"page_id","page_id":"30dd50a654258024b865d338f1febdee"}`, title `[Bot Auto-Run v2 TEST] Tracking Report — TODAY`, icon `🤖`, content from Step 7. Save the returned URL.
+`mcp__Notion__notion-create-pages` with parent `{"type":"page_id","page_id":"30dd50a654258024b865d338f1febdee"}`, icon `🤖`, content from Step 7.
+
+Title depends on MODE:
+- `MODE=prod` → `🧮 Tracking Report — TODAY`
+- `MODE=test` → `[Bot Auto-Run TEST] Tracking Report — TODAY`
+
+Save the returned URL.
 
 ---
 
-## STEP 9 — DM Mary AND Luke via Slack bot token (NOT MCP)
+## STEP 9 — DM recipients via Slack bot token (NOT MCP)
 
-Use `curl` with the bot token directly so the DM appears from `paid_media_report_bot`. Two separate DMs — same content, different recipients. Mary's user ID is `U09FNB5TC12`; Luke's is `U09DBQ4E9T9`.
+Use `curl` with the bot token directly so the DM appears from `paid_media_report_bot`. Recipients depend on MODE:
+- `MODE=prod` → DM Mary (`U09FNB5TC12`) AND Luke (`U09DBQ4E9T9`). Two separate DMs, same content.
+- `MODE=test` → DM Luke only.
 
 ```bash
 NOTION_URL="<from step 8>"
 TL_DR="<3 key bullets from your Best/Worst commentary>"
+MODE="${MODE:-prod}"
 
 PAYLOAD=$(python3 -c "
 import json, os
@@ -303,21 +321,23 @@ text = (
     '🤖 Generated by Paid Media Bot'
 )
 print(json.dumps({'text': text}))
-" )
+")
 
-# DM Mary
-curl -s -X POST \
-  -H "Authorization: Bearer $SLACK_BOT_TOKEN" \
-  -H "Content-Type: application/json; charset=utf-8" \
-  -d "$(echo "$PAYLOAD" | python3 -c "import sys,json; d=json.load(sys.stdin); d['channel']='U09FNB5TC12'; print(json.dumps(d))")" \
-  https://slack.com/api/chat.postMessage
+send_dm() {
+  local user_id=$1
+  curl -s -X POST \
+    -H "Authorization: Bearer $SLACK_BOT_TOKEN" \
+    -H "Content-Type: application/json; charset=utf-8" \
+    -d "$(echo "$PAYLOAD" | python3 -c "import sys,json; d=json.load(sys.stdin); d['channel']='$user_id'; print(json.dumps(d))")" \
+    https://slack.com/api/chat.postMessage
+}
 
-# DM Luke (for visibility while still in TEST mode)
-curl -s -X POST \
-  -H "Authorization: Bearer $SLACK_BOT_TOKEN" \
-  -H "Content-Type: application/json; charset=utf-8" \
-  -d "$(echo "$PAYLOAD" | python3 -c "import sys,json; d=json.load(sys.stdin); d['channel']='U09DBQ4E9T9'; print(json.dumps(d))")" \
-  https://slack.com/api/chat.postMessage
+if [ "$MODE" = "prod" ]; then
+  send_dm "U09FNB5TC12"   # Mary
+  send_dm "U09DBQ4E9T9"   # Luke (visibility while ramping)
+else
+  send_dm "U09DBQ4E9T9"   # Luke only (test)
+fi
 ```
 
 Both DMs appear from `paid_media_report_bot` in each recipient's Slack.
