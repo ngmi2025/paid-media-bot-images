@@ -148,7 +148,13 @@ Poll each via `mcp__Hex__get_thread` every 30s until IDLE. Retry once on error.
 
 ## STEP 3 — Parse Hex responses + compute pacing
 
-Parse markdown tables. For each card, run `lm_prediction(daily_cumulative, days_in_month=days_in_current_month)`. Compute pct_min/pct_stretch using `goals.json`. Color: red <85, yellow 85-100, green ≥100. BCP has no min — null.
+Parse markdown tables. For each card, run `lm_prediction(daily_cumulative, days_in_month=days_in_current_month)`. Compute pct_min/pct_stretch using `goals.json`.
+
+**Color rules (Mary's spec):**
+- **Last / Current / Pacing-% cells:** red <85, yellow 85-100, green ≥100.
+- **Needed/Day cell:** compare numerically to Current/Day. `needed ≤ current/day` → green (we're already doing more than required); `needed > current/day` → red (we'd need to step it up). `n/a` → gray. *Don't* derive this from the pacing percent.
+- **Tier-totals Actuals & Pacing cells (in the Tiers subtable):** color matches whichever breakpoint range the value falls into. e.g. AP breakpoints `[0-149 red, 150-349 orange, 350+ yellow, 500+ green]` — Actuals 301 → orange; Pacing 388 → yellow. The renderer auto-derives these from the `breakpoints` list, so just supply numeric `actuals` and `pacing` values; don't pass explicit colors.
+- **BCP has no min — null.**
 
 **Use Thread D for "Last" values:** for each (card, channel) compute last-Monday's pacing-to-goal % from Thread D's `mtd_total` and `days_elapsed`, then `last_pacing = mtd * days_in_month / days_elapsed`. Mini-Pacing-Google `last`/`current` values must reflect actual last-week vs this-week snapshots. Same for the Pacing tables' "Last" column on EOM Pacing / Pacing to Min / Pacing to Stretch.
 
