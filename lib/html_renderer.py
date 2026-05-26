@@ -307,6 +307,54 @@ def _color_class(color: str | None) -> str:
     }.get(color, "")
 
 
+def _needed_vs_current_color(needed: str, current_per_day: str) -> str:
+    """Mary's rule for the Needed/Day cell: green if we're already doing more than required.
+
+    needed <= current/day -> green_bg  (we'd close the gap at our current rate)
+    needed >  current/day -> red_bg    (we need to step it up to hit target)
+    Either value not numeric ('n/a', '') -> gray_bg.
+    """
+    try:
+        n = float(str(needed).replace(",", ""))
+        c = float(str(current_per_day).replace(",", ""))
+    except (ValueError, TypeError):
+        return "gray_bg"
+    return "green_bg" if n <= c else "red_bg"
+
+
+def _tier_color_for_value(value: float | int | str, breakpoints: list) -> str:
+    """Find which tier a numeric value falls into. Returns the tier's bg color.
+
+    `breakpoints` is the same shape used by _render_tier_subtable:
+        [(name, range_str, bg), ...]
+        where range_str is "lo-hi" (e.g. "0-149") or "lo+" (e.g. "350+").
+    When multiple "+" tiers match (e.g. 600 matches both 350+ and 500+), the
+    HIGHEST matching tier wins (its color is returned).
+    """
+    try:
+        v = float(value)
+    except (ValueError, TypeError):
+        return ""
+    last_bg = ""
+    for _name, rng, bg in breakpoints:
+        rng = rng.strip()
+        if rng.endswith("+"):
+            lo = rng.rstrip("+").strip()
+            try:
+                if v >= float(lo):
+                    last_bg = bg
+            except ValueError:
+                continue
+        elif "-" in rng:
+            try:
+                lo, hi = rng.split("-", 1)
+                if float(lo.strip()) <= v <= float(hi.strip()):
+                    last_bg = bg
+            except ValueError:
+                continue
+    return last_bg
+
+
 def render_html_to_png(
     html: str,
     out_path: Path | str,
@@ -409,7 +457,9 @@ def _render_tier_subtable(tiers: dict[str, Any]) -> str:
         "</tr>"
     )
 
-    # Row 2: totals
+    # Row 2: totals — Actuals + Pacing cells colored by which tier the value lands in
+    actuals_cc = _color_class(_tier_color_for_value(tiers["actuals"], tiers["breakpoints"]))
+    pacing_cc = _color_class(_tier_color_for_value(tiers["pacing"], tiers["breakpoints"]))
     status_cell = (
         f"<td class='label {status_cc}' colspan='{span}'>{status}</td>"
         if status
@@ -418,8 +468,8 @@ def _render_tier_subtable(tiers: dict[str, Any]) -> str:
     row2 = (
         "<tr>"
         "<td class='tier-label'>Totals</td>"
-        f"<td class='num bold'>{tiers['actuals']}</td>"
-        f"<td class='num bold'>{tiers['pacing']}</td>"
+        f"<td class='num bold {actuals_cc}'>{tiers['actuals']}</td>"
+        f"<td class='num bold {pacing_cc}'>{tiers['pacing']}</td>"
         f"{status_cell}"
         "</tr>"
     )
@@ -490,6 +540,13 @@ def render_pacing_tables(
         )
         body_rows = []
         for r in card["rows"]:
+            # Needed/Day color follows Mary's rule: needed <= current/day -> green; else red;
+            # n/a (e.g. EOM Pacing row) -> gray. Caller may override by passing needed_per_day_color.
+            needed_color = r.get("needed_per_day_color")
+            if not needed_color:
+                needed_color = _needed_vs_current_color(
+                    r.get("needed_per_day", ""), r.get("current_per_day", "")
+                )
             body_rows.append(
                 "<tr>"
                 + _cell(r["label"], label=True)
@@ -497,7 +554,7 @@ def render_pacing_tables(
                 + _cell(r.get("ud", "n/a"), r.get("ud_color"))
                 + _cell(r["current"], r.get("current_color"))
                 + _cell(r.get("current_per_day", ""), r.get("current_per_day_color") or "gray_bg")
-                + _cell(r.get("needed_per_day", ""), r.get("needed_per_day_color") or "gray_bg")
+                + _cell(r.get("needed_per_day", ""), needed_color)
                 + "</tr>"
             )
         blocks.append(f"<table>{header_row}{''.join(body_rows)}</table>")
